@@ -6,7 +6,6 @@ import Validator from '../../utils/Validator'
 import { RESOLUTION_ARR } from '../../utils/Settings'
 import './index.css'
 
-
 class Index extends React.Component {
   constructor(props) {
     super(props)

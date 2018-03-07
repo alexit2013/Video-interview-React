@@ -5,6 +5,9 @@ import 'bulma/css/bulma.css'
 import './App.css'
 import Index from './index'
 import Meeting from './meeting'
+import auth from '../config/auth'
+
+auth()
 
 class App extends Component {
   render() {

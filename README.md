@@ -1,3 +1,3 @@
 # Video-interview-React
 视频面试系统
-### /src/library/AgoraRTC.js   为声网所提供的SDK版本为2.1.0
+### /src/library/AgoraRTC.js 为声网所提供的SDK版本为2.1.0

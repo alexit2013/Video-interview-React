@@ -15,7 +15,6 @@ const tile_canvas = {
   '7': ['span 3/span 4/13/5', 'span 3/span 4/13/9', 'span 3/span 4/13/13', 'span 3/span 4/13/17', 'span 3/span 4/13/21', 'span 3/span 4/13/25', 'span 9/span 16/10/21'],
 }
 
-
 /**
  * @prop appId uid
  * @prop transcode attendeeMode videoProfile channel baseMode
