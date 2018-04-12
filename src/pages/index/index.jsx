@@ -5,6 +5,7 @@ import '../../assets/fonts/css/icons.css'
 import Validator from '../../utils/Validator'
 import { RESOLUTION_ARR } from '../../utils/Settings'
 import './index.css'
+import { Button } from 'antd'
 
 class Index extends React.Component {
   constructor(props) {
@@ -58,6 +59,7 @@ class Index extends React.Component {
         <div className="ag-main">
           <section className="login-wrapper">
             <div className="login-header">
+              <Button type="primary">Primary</Button>
               <img src={require('../../assets/images/ag-logo.png')} alt="" />
             </div>
             <div className="login-body">
