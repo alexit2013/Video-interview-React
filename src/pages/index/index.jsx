@@ -59,8 +59,6 @@ class Index extends React.Component {
           <section className="login-wrapper">
             <div className="login-header">
               <img src={require('../../assets/images/ag-logo.png')} alt="" />
-              <p className="login-title">AgoraWeb v2.1</p>
-              <p className="login-subtitle">Powering Real-Time Communications</p>
             </div>
             <div className="login-body">
               <div className="columns">
@@ -128,15 +126,6 @@ class Index extends React.Component {
                   </a>
             </div>
           </section>
-        </div>
-        <div className="ag-footer">
-          <a className="ag-href" href="https://www.agora.io">
-            <span>Powered By Agora</span>
-          </a>
-          <div>
-            <span>Interested in Agora video call SDK? Contact </span>
-            <span className="ag-contact">sales@agora.io</span>
-          </div>
         </div>
       </div>
     )

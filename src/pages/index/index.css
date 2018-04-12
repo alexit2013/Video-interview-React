@@ -11,11 +11,12 @@
 
 .index .ag-footer {
   display: flex;
-  padding: 0 30px;
   justify-content: space-between;
   align-items: center;
 }
-
+.wrapper{
+  padding-bottom: 10rem;
+}
 .index .ag-main {
   flex-grow: 1;
 }
