@@ -99,7 +99,9 @@
   },
   "main": "/src/index.js",
   "devDependencies": {
-    "babel-plugin-import": "^1.7.0"
+    "babel-plugin-import": "^1.7.0",
+    "less": "^3.0.1",
+    "less-loader": "^4.1.0"
   },
   "repository": {
     "type": "git",

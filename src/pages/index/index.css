@@ -32,8 +32,7 @@
   font-size: 14px;
 }
 
-.login-header,
-.login-footer {
+.login-header, .login-footer {
   text-align: center;
   margin: 30px 0;
 }
@@ -278,4 +277,8 @@
 
 .validate-icon>.ag-icon-valid {
   color: #7ED321;
+}
+
+.login-input-Account{
+  margin-bottom: 3rem;
 }

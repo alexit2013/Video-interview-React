@@ -5,20 +5,113 @@ import '../../assets/fonts/css/icons.css'
 import Validator from '../../utils/Validator'
 import { RESOLUTION_ARR } from '../../utils/Settings'
 import './index.css'
-import { Button } from 'antd'
+import { Input, Button } from 'antd'
 
 class Index extends React.Component {
+  /**
+   * Chrome 浏览器，Chrome 58 及以上版本（仅支持 HTTPS）
+   * Firefox 浏览器，Firefox 56 及以上版本（仅支持 HTTPS）
+   * Opera 浏览器，Opera 45 及以上版本（仅支持 HTTPS）
+   * Safari 浏览器，Safari 11 及以上版本（仅支持 HTTPS）
+   **/
   constructor(props) {
     super(props)
     this.state = {
-      joinBtn: false,
-      channel: '',
-      baseMode: 'avc',
+      loading: false,
+      isShow: false,
+      video: {}
+    }
+
+    let regFirefox = /firefox\/[\d.]+/gi
+    let regChrome = /chrome\/[\d.]+/gi
+    let regOpera = /OPR\/[\d.]+/gi
+    let regSafari = /Version\/[\d.]+/gi
+    let userAgent = navigator.userAgent
+
+    let appVersion = navigator.appVersion
+    console.log(appVersion, '浏览器的版本号')
+    // 谷歌 欧朋 火狐配置
+    let configChrome = {
+      isShow: true,
+      channel: '1',
+      baseMode: 'al',
       transcode: 'interop',
       attendeeMode: 'video',
-      videoProfile: '480p_4',
+      videoProfile: '480p'
+    }
+    // 苹果配置
+    let configSafari = {
+      isShow: true,
+      channel: '1',
+      baseMode: 'al',
+      transcode: 'h264_interop',
+      attendeeMode: 'video',
+      videoProfile: '480p'
+    }
+
+    if (userAgent.indexOf('OPR') !== -1) {
+      // 欧朋浏览器
+      console.log(userAgent.match(regOpera)[0], '欧朋浏览器')
+
+      let version = userAgent.match(regOpera)[0]
+      version = version.match('\\/([0-9]+)\\.')[1] + ''
+      console.log(version)
+
+      if (version > '45') {
+        for (const i in configChrome) {
+          this.state.video[i] = configChrome[i]
+        }
+        this.handleJoin()
+      }
 
     }
+    if (userAgent.indexOf('Firefox') !== -1) {
+      // 火狐浏览器
+      console.log(userAgent.match(regFirefox)[0], '火狐浏览器')
+
+      let version = userAgent.match(regFirefox)[0]
+      version = version.match('\\/([0-9]+)\\.')[1] + ''
+      console.log(version)
+
+      if (version > '56') {
+        for (const i in configChrome) {
+          this.state.video[i] = configChrome[i]
+        }
+        this.handleJoin()
+      }
+
+    }
+    if (userAgent.indexOf('Chrome') !== -1) {
+      // 谷歌浏览器
+      console.log(userAgent.match(regChrome)[0], '谷歌浏览器')
+
+      let version = userAgent.match(regChrome)[0]
+      version = version.match('\\/([0-9]+)\\.')[1] + ''
+
+      if (version > '58') {
+        for (const i in configChrome) {
+          this.state.video[i] = configChrome[i]
+        }
+        console.log(this.state)
+        // this.handleJoin()
+      }
+    }
+    if (userAgent.indexOf('Version') !== -1) {
+      // 苹果浏览器
+      console.log(userAgent.match(regSafari)[0], '苹果浏览器')
+
+      let version = userAgent.match(regSafari)[0]
+      version = version.match('\\/([0-9]+)\\.')[1] + ''
+      console.log(version)
+
+      if (version > '10') {
+        for (const i in configSafari) {
+          this.state.video[i] = configChrome[i]
+        }
+        this.handleJoin()
+      }
+    }
+
   }
 
   componentDidMount() {
@@ -40,16 +133,19 @@ class Index extends React.Component {
   }
 
   handleJoin = () => {
-    if (!this.state.joinBtn) {
-      return
-    }
-    console.log(this.state)
+    // if (!this.state.joinBtn) {
+    //   return
+    // }
     Cookies.set('channel', this.state.channel)
     Cookies.set('baseMode', this.state.baseMode)
     Cookies.set('transcode', this.state.transcode)
     Cookies.set('attendeeMode', this.state.attendeeMode)
     Cookies.set('videoProfile', this.state.videoProfile)
     window.location.hash = "meeting"
+  }
+
+  enterLoading = () => {
+    this.setState({ loading: true })
   }
 
   render() {
@@ -59,8 +155,18 @@ class Index extends React.Component {
         <div className="ag-main">
           <section className="login-wrapper">
             <div className="login-header">
-              <Button type="primary">Primary</Button>
               <img src={require('../../assets/images/ag-logo.png')} alt="" />
+            </div>
+            <div className="login-input-Account">
+              <Input placeholder="Email" />
+            </div>
+            <div className="login-input-Account">
+              <Input placeholder="Password" />
+            </div>
+            <div className="login-input-Account">
+              <Button type="primary" loading={this.state.loading} onClick={this.enterLoading}>
+                Click me!
+              </Button>
             </div>
             <div className="login-body">
               <div className="columns">

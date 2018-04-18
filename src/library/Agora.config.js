@@ -1,2 +1,2 @@
 // Create a developer account at [Agora.io](https://dashboard.agora.io/signin/), and obtain an App ID		
-export const AGORA_APP_ID = 'c59d81952e7c4bc2b3b3b235bef31288'
+export const AGORA_APP_ID = 'cf5b3df12aa74d6a88a9f7192d806cd2'
