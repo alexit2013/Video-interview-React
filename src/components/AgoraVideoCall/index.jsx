@@ -1,7 +1,8 @@
 import React from 'react'
 import { merge } from 'lodash'
+import * as Cookies from 'js-cookie'
 
-import './canvas.css'
+import './canvas.less'
 import '../../assets/fonts/css/icons.css'
 
 const AgoraRTC = require('../../library/AgoraRTC')
@@ -96,6 +97,7 @@ class AgoraCanvas extends React.Component {
       this.state.streamList.map((item, index) => {
         let id = item.getId()
         let dom = document.querySelector('#ag-item-' + id)
+        console.log(dom, '====>>>> dom')
         if (!dom) {
           dom = document.createElement('section')
           dom.setAttribute('id', 'ag-item-' + id)
@@ -104,16 +106,12 @@ class AgoraCanvas extends React.Component {
           item.play('ag-item-' + id)
         }
         if (index === no - 1) {
+          dom.setAttribute('style', `grid-area: span 3/span 4/4/25;
+                    z-index:1;width:calc(100% - 20px);height:calc(100% - 20px)`)
+        } else if (index === no - 2) {
           dom.setAttribute('style', `grid-area: span 12/span 24/13/25`)
         }
-        else {
-          dom.setAttribute('style', `grid-area: span 3/span 4/${4 + 3 * index}/25;
-                    z-index:1;width:calc(100% - 20px);height:calc(100% - 20px)`)
-        }
-
         item.player.resize && item.player.resize()
-
-
       })
     }
     // tile mode
@@ -144,7 +142,7 @@ class AgoraCanvas extends React.Component {
   render() {
     const style = {
       display: 'grid',
-      gridGap: '10px',
+      gridGap: '50px',
       alignItems: 'center',
       justifyItems: 'center',
       gridTemplateRows: 'repeat(12, auto)',
@@ -197,13 +195,13 @@ class AgoraCanvas extends React.Component {
       <div id="ag-canvas" style={style}>
         <div className="ag-btn-group">
           {exitBtn}
-          {videoControlBtn}
-          {audioControlBtn}
+          {/*{videoControlBtn}*/}
+          {/*{audioControlBtn}*/}
           {/* <span className="ag-btn shareScreenBtn" title="Share Screen">
                         <i className="ag-icon ag-icon-screen-share"></i>
                     </span> */}
           {switchDisplayBtn}
-          {hideRemoteBtn}
+          {/*{hideRemoteBtn}*/}
         </div>
       </div>
     )
@@ -375,8 +373,8 @@ class AgoraCanvas extends React.Component {
       this.setState({ readyState: false })
       this.client = null
       this.localStream = null
-      // redirect to index
-      window.location.hash = ''
+      Cookies('channel', undefined)
+      window.history.go(-1)
     }
   }
 }

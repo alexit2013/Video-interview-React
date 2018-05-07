@@ -4,7 +4,7 @@
  * email: 1114386442@qq.com
  */
 export default {
-  apiURL: 'http://dev-api.teachfuture.org/v2/', // 服务端 API 地址配置
+  apiURL: 'https://dev-ivapi.teachfuture.org/', // 服务端 API 地址配置
   selfURL: 'http://localhost:8080/', // 网站自己的地址
   dashboardURL: 'http://localhost:8082/', // 用户后台的地址
   institutionURL: 'http://localhost:8081/', // 机构网站地址

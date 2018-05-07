@@ -1,17 +1,10 @@
-/*
- * Created by Administrator on 2017/10/11 0011.
- * author: hanbenhao
- * email: 1114386442@qq.com
- */
 import config from '../env'
+import { message } from 'antd';
 const api = config.apiURL
 require('babel-polyfill')
 require('es6-promise').polyfill();
 
 class apiBase {
-  constructor(name, options) {
-
-  }
   tokenHeader(options) {
     let accessToken = localStorage.getItem("accessToken")
     if (accessToken !== 'undefined') {
@@ -51,16 +44,28 @@ class apiBase {
   }
   // post请求
   post(name, options) {
-    let body = this.getSerialization(options)
+    let body = JSON.stringify(options)
     let request = {
       method: 'POST'
     }
-    if (body) request['body'] = body
     request = this.tokenHeader(request)
+    if (body) request['body'] = body
+    console.log(request, 'request')
     return fetch(api + name, request).then((res) => {
-      let data = res.json()
+      console.log(res, 'res')
       if (res.status === 200) {
-        return data
+        return res.json().then((ret) => {
+          return ret
+        })
+      } else {
+        return res.json().then((ret) => {
+          message.warning(ret.message)
+          if (ret.status === 401) {
+            window.location.hash = ''
+            return false
+          }
+          return ret
+        })
       }
     })
   }
