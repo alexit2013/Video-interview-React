@@ -128,7 +128,7 @@ class Index extends React.Component {
     let configChrome = {
       isShow: true,
       baseMode: 'al',
-      transcode: 'h264_interop',
+      transcode: 'interop',
       attendeeMode: 'video',
       videoProfile: '480p'
     }
@@ -238,12 +238,6 @@ class Index extends React.Component {
               <Button type="primary" loading={this.state.loading} onClick={this.enterLoading}>
                 login
               </Button>
-            </div>
-            <div className="login-footer">
-              <a id="joinBtn"
-                onClick={this.handleJoin.bind(this, 1)}
-                className="ag-rounded button is-info">Join
-                  </a>
             </div>
           </section>
         </div>

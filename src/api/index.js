@@ -17,5 +17,9 @@ export default {
   // 用户进入房间面试埋点
   apiOpenRoomUser (id) {
     return apiBase.post(`interview/open?id=${id}`)
+  },
+  // 面试加时接口
+  apiTimeadd (id) {
+    return apiBase.post(`/interview/add-time?id=${id}`)
   }
 }

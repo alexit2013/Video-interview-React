@@ -57,6 +57,7 @@ class AgoraCanvas extends React.Component {
           }
         },
           err => {
+            console.log($.attendeeMode)
             console.log("getUserMedia failed", err)
           })
       })
@@ -77,12 +78,6 @@ class AgoraCanvas extends React.Component {
       }, 2000)
     })
   }
-
-  // componentWillUnmount () {
-  //     // remove listener
-  //     let canvas = document.querySelector('#ag-canvas')
-  //     canvas.removeEventListener('mousemove')
-  // }
 
   componentDidUpdate() {
     // rerendering
