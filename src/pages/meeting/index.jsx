@@ -10,9 +10,14 @@ const AgoraRTC = require('../../library/AgoraRTC')
 const Search = Input.Search;
 
 class Meeting extends React.Component {
+  state = {
+    searchFont: ''
+  }
   constructor(props) {
     super(props)
-    this.websocketfunction()
+    this.openRoomUser().then(() => {
+      this.websocketfunction()
+    })
     if (!AgoraRTC.checkSystemRequirements()) {
       let data = 'Your brower is currently out of date. Please kindly upgrade it to support video interview functionality. And we recommend Chrome browser.'
       this.openNotification(data)
@@ -36,14 +41,12 @@ class Meeting extends React.Component {
     }
     this.uid = undefined
   }
-  async componentWillMount () {
-    await this.openRoomUser()
-  }
   // websocket处理
-  roomId = localStorage.getItem('roomId')
+  roomId = Number(localStorage.getItem('roomId'))
   userId = JSON.parse(localStorage.getItem('user')).id
   websocketfunction () {
-    let wsServer = 'wss://dev-swoole.teachfuture.org?user_id=' + this.userId + '&interview_id=' + this.roomId
+    console.log(this.userId, 'this.userId', this.roomId, 'this.roomId')
+    let wsServer = 'wss://dev-ivapi.teachfuture.org/wss?user_id=' + this.userId + '&interview_id=' + this.roomId
     this.websocket = new WebSocket(wsServer)
     this.websocket.onopen =(evt) => {
       console.log(evt, 'onopen')
@@ -51,7 +54,7 @@ class Meeting extends React.Component {
     this.websocket.onclose = (evt) => {
       console.log(evt, "onclose")
     }
-    this.websocket.onmessage = (evt) => {
+    this.websocket.onmessage = async (evt) => {
       let data = JSON.parse(evt.data)
       if (data.code + '' === '1003') {
         if (JSON.parse(localStorage.getItem('user')).role === 'institution') {
@@ -60,8 +63,22 @@ class Meeting extends React.Component {
         this.openNotification(data.message)
       }
       if (data.code + '' === '1002') {
-        this.refs.AgoraVideoCall.handleExit()
         this.openNotification(data.message)
+        window.history.go(-1)
+      }
+      if (data.code + '' === '1001' || data.code + '' === '1004') {
+        let pLabel = document.createElement('p')
+        pLabel.style.color = '#ffdb4a'
+        console.log(pLabel.classList, 'pLabel')
+        pLabel.innerHTML = data.message
+        this.refs.chatRoom.appendChild(pLabel)
+        this.refs.chatRoom.scrollTop = this.refs.chatRoom.scrollHeight
+      }
+      if (data.code + '' === '1011') {
+        let pLabel = document.createElement('p')
+        pLabel.innerHTML = data.users[data.user_id] + ': ' + data.message
+        this.refs.chatRoom.appendChild(pLabel)
+        this.refs.chatRoom.scrollTop = this.refs.chatRoom.scrollHeight
       }
       console.log(data, 'onmessage')
     }
@@ -89,7 +106,8 @@ class Meeting extends React.Component {
   // 输入提交
   async SearchSubmission(value) {
     console.log(value)
-    this.websocket.send(JSON.stringify({"interview_id":this.roomId,"user_id":this.userId,"message": "12345678900"}))
+    await this.websocket.send(JSON.stringify({"interview_id":this.roomId,"user_id":this.userId,"message": this.state.searchFont}))
+    await this.setState({searchFont: ''})
   }
   // 添加面试时间
   async addTime(key) {
@@ -97,6 +115,10 @@ class Meeting extends React.Component {
     notification.close(key)
   }
   // 加时提醒通知
+  // input输入更新数据
+  handleChange (even) {
+    this.setState({[even.target.name]: even.target.value})
+  }
   TimeopenNotification () {
     const key = `open${Date.now()}`;
     const btn = (
@@ -141,15 +163,16 @@ class Meeting extends React.Component {
           </div>
         </div>
         <div className='chatRoll'>
-          <div className='container'>
-
-          </div>
+          <div className='container' ref='chatRoom'></div>
           <div className='inputContainer'>
-            <Search onSearch={this.SearchSubmission.bind(this)} placeholder="input search text" enterButton="Search" size="large" />
+            <Search name='searchFont'
+                    value={this.state.searchFont}
+                    onChange={this.handleChange.bind(this)}
+                    onSearch={this.SearchSubmission.bind(this)}
+                    placeholder="input search text"
+                    enterButton="Search"
+                    size="large" />
           </div>
-          {/*<Button type="primary" onClick={this.TimeopenNotification.bind(this)}>*/}
-            {/*加时提醒通知*/}
-          {/*</Button>*/}
         </div>
       </div>
     )

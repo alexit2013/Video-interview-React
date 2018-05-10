@@ -352,7 +352,7 @@ class AgoraCanvas extends React.Component {
   }
 
   handleExit = (e) => {
-    if (e.currentTarget.classList.contains('disabled')) {
+    if (e && e.currentTarget.classList.contains('disabled')) {
       return
     }
     try {
