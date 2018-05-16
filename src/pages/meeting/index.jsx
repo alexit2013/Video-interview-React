@@ -48,13 +48,36 @@ class Meeting extends React.Component {
     console.log(this.userId, 'this.userId', this.roomId, 'this.roomId')
     let wsServer = 'wss://dev-ivapi.teachfuture.org/wss?user_id=' + this.userId + '&interview_id=' + this.roomId
     this.websocket = new WebSocket(wsServer)
+    let other = this
+    let heartCheck = {
+      //timeout: 540000,        //9分钟发一次心跳
+      //timeout: 60000,        //1分钟发一次心跳
+      timeout: 180000,        //3分钟发一次心跳
+      timeoutObj: null,
+      serverTimeoutObj: null,
+      reset: function () {
+        clearTimeout(this.timeoutObj)
+        clearTimeout(this.serverTimeoutObj)
+        return this
+      },
+      start: function () {
+        this.timeoutObj = setTimeout(() => {
+          other.websocket.send(JSON.stringify({"heart": "ping"})); /// *心跳检测发送内容
+          this.serverTimeoutObj = setTimeout(function () {
+            other.websocket.close()
+          }, this.timeout)
+        },this.timeout)
+      }
+    }
     this.websocket.onopen =(evt) => {
       console.log(evt, 'onopen')
+      heartCheck.reset().start()
     }
     this.websocket.onclose = (evt) => {
       console.log(evt, "onclose")
     }
     this.websocket.onmessage = async (evt) => {
+      heartCheck.reset().start()
       let data = JSON.parse(evt.data)
       if (data.code + '' === '1003') {
         if (JSON.parse(localStorage.getItem('user')).role === 'institution') {
@@ -114,11 +137,11 @@ class Meeting extends React.Component {
     await http.apiTimeadd(this.roomId)
     notification.close(key)
   }
-  // 加时提醒通知
   // input输入更新数据
   handleChange (even) {
     this.setState({[even.target.name]: even.target.value})
   }
+  // 加时提醒通知
   TimeopenNotification () {
     const key = `open${Date.now()}`;
     const btn = (
@@ -138,6 +161,7 @@ class Meeting extends React.Component {
       duration: 0
     })
   }
+
   render() {
     return (
       <div className="wrapper meeting" style={{height: '1000px'}}>
