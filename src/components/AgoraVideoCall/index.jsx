@@ -92,7 +92,6 @@ class AgoraCanvas extends React.Component {
       this.state.streamList.map((item, index) => {
         let id = item.getId()
         let dom = document.querySelector('#ag-item-' + id)
-        console.log(dom, '====>>>> dom')
         if (!dom) {
           dom = document.createElement('section')
           dom.setAttribute('id', 'ag-item-' + id)
