@@ -368,6 +368,7 @@ class AgoraCanvas extends React.Component {
       this.client = null
       this.localStream = null
       Cookies('channel', undefined)
+      Cookies('auth/accessToken', undefined)
       window.history.go(-1)
     }
   }
