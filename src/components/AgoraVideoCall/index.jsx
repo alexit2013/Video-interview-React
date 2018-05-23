@@ -372,6 +372,11 @@ class AgoraCanvas extends React.Component {
       window.history.go(-1)
     }
   }
+
+  componentWillUnmount () {
+    this.handleExit()
+    console.log('componentWillUnmount')
+  }
 }
 
 export default AgoraCanvas

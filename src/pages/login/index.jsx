@@ -50,7 +50,7 @@ class Index extends React.Component {
   // 处理用户免登陆 登陆令牌
   NoLogin = async () => {
     let accessToken = Cookies.get('auth/accessToken')
-    if (accessToken) {
+    if (accessToken !== 'undefined') {
       localStorage.setItem('accessToken', accessToken)
       await this.postUserInfo()
       this.setState({SpinLoading: false})

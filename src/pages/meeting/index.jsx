@@ -119,9 +119,9 @@ class Meeting extends React.Component {
       }
       console.log(data, 'onmessage')
     }
-    // this.websocket.onerror = (evt, e) => {
-    //   console.log('Error occured: ' + evt.data)
-    // }
+    this.websocket.onclose = () => {
+      console.log('websocket关闭')
+    }
   }
   // 通知提醒框
   openNotification = (data) => {
@@ -180,6 +180,7 @@ class Meeting extends React.Component {
     if (minute < 10) minute = '0' + minute
     await this.setState({hour: hour, minute: minute})
   }
+
   componentWillMount() {
     this.openRoomUser().then(() => {
       this.websocketfunction()
@@ -226,7 +227,6 @@ class Meeting extends React.Component {
           <div className='container' ref='chatRoom'></div>
           <div className='inputContainer'>
             <Select
-              showSearch
               style={{ width: '85%' }}
               placeholder="Select a person"
               size='large'
@@ -246,6 +246,10 @@ class Meeting extends React.Component {
         </div>
       </div>
     )
+  }
+
+  componentWillUnmount () {
+    this.websocket.close()
   }
 }
 
